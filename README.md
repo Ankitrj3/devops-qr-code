@@ -41,9 +41,78 @@ The goal is to get hands-on with DevOps practices like Containerization, CICD an
 
 Look at the capstone project for more detials.
 
-## Author
+## What's Added After Forking
+
+This repository has been extended with the following DevOps implementations:
+
+### 🐳 Dockerization
+
+Both the API and front-end have been containerized for easy deployment:
+
+#### API Dockerfile (`api/Dockerfile`)
+- Base image: `python:3.9`
+- Installs Python dependencies from `requirements.txt`
+- Exposes port 8000 for the FastAPI server
+- Runs with uvicorn on `0.0.0.0:8000`
+
+#### Front-end Dockerfile (`front-end-nextjs/Dockerfile`)
+- Base image: `node:18-alpine`
+- Multi-stage build for optimized image size
+- Supports multiple package managers (npm, yarn, pnpm)
+- Builds the Next.js application
+- Exposes port 3000
+- Runs with `npm start`
+
+**Running with Docker:**
+
+```bash
+# Build and run API
+cd api
+docker build -t devops-qr-code-api .
+docker run -p 8000:8000 --env-file .env devops-qr-code-api
+
+# Build and run Front-end
+cd front-end-nextjs
+docker build -t devops-qr-code-frontend .
+docker run -p 3000:3000 devops-qr-code-frontend
+```
+
+### 🚀 CI/CD Pipeline
+
+Automated build and deployment pipeline using GitHub Actions (`.github/workflows/build-docker.yaml`):
+
+**Workflow Features:**
+- **Trigger**: Automatically runs on push to `main` branch when Dockerfiles are modified
+- **Jobs**: 
+  - Checks out the repository
+  - Builds Docker images for both API and front-end
+  - Pushes images to Docker Hub:
+    - `ankitrj3/devops-qr-code-api:latest`
+    - `ankitrj3/devops-qr-code-frontend:latest`
+
+**Pre-requisites for CI/CD:**
+- Docker Hub account
+- `DOCKER_HUB_TOKEN` secret configured in GitHub repository settings
+
+**Pull and run published images:**
+
+```bash
+# Pull and run API
+docker pull ankitrj3/devops-qr-code-api:latest
+docker run -p 8000:8000 --env-file .env ankitrj3/devops-qr-code-api:latest
+
+# Pull and run Front-end
+docker pull ankitrj3/devops-qr-code-frontend:latest
+docker run -p 3000:3000 ankitrj3/devops-qr-code-frontend:latest
+```
+
+## Original Author
 
 [Rishab Kumar](https://github.com/rishabkumar7)
+
+## Forked & Extended By
+
+[Ankit Ranjan](https://github.com/Ankitrj3)
 
 ## License
 
