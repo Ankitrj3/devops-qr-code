@@ -9,7 +9,9 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
       - name: build image
-        run: docker build ./api/ -t ankitrj3/devops-qr-code-api:latest
+        run: |
+          docker build ./api/ -t ankitrj3/devops-qr-code-api:latest
+          docker build ./front-end-nextjs/ -t ankitrj3/devops-qr-code-frontend:latest
       - name: push image to docker hub 
         run: |
           docker login -u ankitrj3 -p ${{ secrets.DOCKER_HUB_TOKEN }}
